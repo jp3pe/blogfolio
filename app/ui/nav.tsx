@@ -16,8 +16,8 @@ export default function Nav() {
           <Image
             src="/profile-sample.webp"
             alt="User Profile sample image"
-            layout="fill"
-            objectFit="cover"
+            width={40}
+            height={40}
             className="rounded-full"
           />
         </li>

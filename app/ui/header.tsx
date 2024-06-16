@@ -1,11 +1,18 @@
-export default function Header() {
+export default function Header({
+  title,
+  updated_at,
+}: {
+  title: string;
+  updated_at: Date;
+}) {
   return (
-    <header className="flex flex-col justify-between items-start p-4 bg-white w-full mb-20">
-      <h1 className="text-4xl font-bold text-left break-words">
-        주말 여행 추천: 경기도 가평
-      </h1>
+    <header className="flex flex-col justify-between items-start bg-white w-full mb-10">
+      <h1 className="text-4xl font-bold text-left break-words">{title}</h1>
       <div className="mt-4">
-        <p>Written on: 2024-06-09</p>
+        <p>
+          Update on:{" "}
+          {updated_at.toISOString().replace(/T/, " ").replace(/\..+/, "")}
+        </p>
       </div>
     </header>
   );
