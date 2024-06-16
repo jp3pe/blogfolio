@@ -1,24 +1,10 @@
-import Content from "@/app/ui/content";
 import Header from "@/app/ui/header";
-import { Marked } from "@ts-stack/markdown";
-import DOMPurify from "dompurify";
-import { JSDOM } from "jsdom";
 import { fetchAllPosts } from "@/app/lib/db";
 import Image from "next/image";
+import path from "path";
+import Content from "@/app/ui/content";
 
-// 마크다운을 안전한 HTML로 변환하는 함수
-const markdownToSafeHtml = (markdown: string): string => {
-  const dirtyHtml = Marked.parse(markdown);
-  const cleanHtml = DOMPurify(new JSDOM("<!DOCTYPE html>").window).sanitize(
-    dirtyHtml
-  );
-  return cleanHtml;
-};
-
-// 안전한 HTML을 렌더링하는 컴포넌트
-const SafeMarkdownComponent = ({ content }: { content: string }) => (
-  <div className="flex flex-col" dangerouslySetInnerHTML={{ __html: markdownToSafeHtml(content) }} />
-);
+const cssFilePath = path.resolve(process.cwd(), "app/ui/post.module.css");
 
 export default async function Post() {
   const posts = await fetchAllPosts();
@@ -35,9 +21,7 @@ export default async function Post() {
             height={500}
             className="m-auto mb-5"
           />
-          {/* <Content> */}
-          <SafeMarkdownComponent content={post.content ?? ""} />
-          {/* </Content> */}
+          <Content content={post.content ?? ""} cssFilePath={cssFilePath} />
         </article>
       ))}
     </main>

@@ -1,12 +1,18 @@
-import Image from "next/image";
-import H2 from "@/app/ui/h2";
+import { markdownToStyledHtml } from "@/app/lib/markdown";
 
-
-// TODO: 필요한지 파악하기
-export default async function Content() {
+export default function Content({
+  content,
+  cssFilePath,
+}: {
+  content: string;
+  cssFilePath: string;
+}) {
   return (
-    <article className="flex flex-col">
-
-    </article>
+    <div
+      className="flex flex-col mb-20"
+      dangerouslySetInnerHTML={{
+        __html: markdownToStyledHtml(content, cssFilePath),
+      }}
+    />
   );
 }

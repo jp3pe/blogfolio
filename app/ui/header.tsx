@@ -6,7 +6,7 @@ export default function Header({
   updated_at: Date;
 }) {
   return (
-    <header className="flex flex-col justify-between items-start p-4 bg-white w-full mb-20">
+    <header className="flex flex-col justify-between items-start bg-white w-full mb-10">
       <h1 className="text-4xl font-bold text-left break-words">{title}</h1>
       <div className="mt-4">
         <p>
