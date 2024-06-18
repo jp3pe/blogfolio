@@ -2,7 +2,7 @@ import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
 import { Post } from "@/app/lib/definitions";
 
-async function connectToDatabase() {
+export async function connectToDatabase() {
   const connection = await mysql.createConnection({
     host: nextConfig.env.MYSQL_HOST,
     user: nextConfig.env.MYSQL_USER,
@@ -27,14 +27,4 @@ export async function fetchAllPosts(): Promise<Post[]> {
   }));
 
   return posts;
-}
-
-export async function insertPost(title: string, content?: string): Promise<void> {
-  const connection = await connectToDatabase();
-  const query = `
-    INSERT INTO post (title, content)
-    VALUES (?, ?)
-  `;
-  await connection.execute(query, [title, content]);
-  await connection.end();
 }

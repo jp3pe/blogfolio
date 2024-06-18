@@ -1,16 +1,18 @@
 "use server";
 
-import { z } from 'zod';
+import { connectToDatabase } from "@/app/lib/db";
 
-import { insertPost } from "./db";
+interface FormData {
+  title: string;
+  content: string;
+}
 
-const FormSchema = z.object({
-  title: z.string({ required_error: 'Please insert a title for the pos.' }),
-});
-
-
-const CreateInvoice = FormSchema.omit({ id: true, content: true, created_at: true, updated_at: true });
-
-export async function actionInsertPost(formData: FormData) {
-  await insertPost(title, content);
+export async function insertPost(formData: FormData) {
+  const connection = await connectToDatabase();
+  const query = `
+    INSERT INTO post (title, content)
+    VALUES (?, ?)
+  `;
+  await connection.execute(query, [formData.title, formData.content]);
+  await connection.end();
 }
