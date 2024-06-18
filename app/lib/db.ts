@@ -29,12 +29,12 @@ export async function fetchAllPosts(): Promise<Post[]> {
   return posts;
 }
 
-export async function insertPost(post: Post): Promise<void> {
+export async function insertPost(title: string, content?: string): Promise<void> {
   const connection = await connectToDatabase();
   const query = `
     INSERT INTO post (title, content)
     VALUES (?, ?)
   `;
-  await connection.execute(query, [post.title, post.content]);
+  await connection.execute(query, [title, content]);
   await connection.end();
 }
