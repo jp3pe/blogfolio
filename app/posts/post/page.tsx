@@ -1,24 +1,9 @@
 import { insertPost } from "@/app/lib/actions";
 
-// async function handleSubmit(formData: FormData) {
-//   "use server";
-
-//   for (let [key, value] of formData.entries()) {
-//     console.log(`${key}: ${value}`);
-//   }
-// }
-
-async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  // formData를 처리하여 insertPost에 전달
-  await insertPost({ title: formData.get('title')?.toString() ?? '', content: formData.get('content')?.toString() ?? '' });
-}
-
 function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white max-w-[680px] mx-auto">
-      <form onSubmit={handleSubmit} className="w-full max-w-[500px]">
+      <form action={insertPost} className="w-full max-w-[501px]">
         <div className="mb-4">
           <label
             htmlFor="title"

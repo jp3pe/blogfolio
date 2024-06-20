@@ -1,15 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 
 export default function Nav() {
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
-      <h1 className="text-2xl font-bold">Blogfolio</h1>
+      <Link href="/">
+        <h1 className="text-2xl font-bold">Blogfolio</h1>
+      </Link>
       <ul className="flex gap-4 items-center">
-        <li>
-          <FaPen className="inline mr-2" />
-          Write
-        </li>
+        <Link href="/posts/post">
+          <li>
+            <FaPen className="inline mr-2" />
+            Write
+          </li>
+        </Link>
         <li>About</li>
         <li>Contact</li>
         <li className="relative h-10 w-10">
