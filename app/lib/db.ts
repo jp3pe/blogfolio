@@ -2,7 +2,7 @@ import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
 import { Post } from "@/app/lib/definitions";
 
-async function connectToDatabase() {
+export async function connectToDatabase() {
   const connection = await mysql.createConnection({
     host: nextConfig.env.MYSQL_HOST,
     user: nextConfig.env.MYSQL_USER,
