@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+/**
+ * The form data interface.
+ */
 const schema = z.object({
   title: z.string({
     invalid_type_error: "Invalid Title",
@@ -14,6 +17,12 @@ const schema = z.object({
   }),
 });
 
+/**
+ * Inserts a new post into the database.
+ *
+ * @param formData - The form data containing the post title and content.
+ * @returns An object with errors, if any.
+ */
 export async function insertPost(formData: FormData) {
   const validatedFields = schema.safeParse({
     title: formData.get("title"),
