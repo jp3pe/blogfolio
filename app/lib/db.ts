@@ -1,6 +1,6 @@
 import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
-import { Post } from "@/app/lib/definitions";
+import { PostType } from "@/app/lib/definitions";
 
 export async function connectToDatabase() {
   const connection = await mysql.createConnection({
@@ -12,13 +12,13 @@ export async function connectToDatabase() {
   return connection;
 }
 
-export async function fetchAllPosts(): Promise<Post[]> {
+export async function fetchAllPosts(): Promise<PostType[]> {
   const connection = await connectToDatabase();
   const query = "SELECT * FROM post";
   const [rows] = (await connection.execute(query)) as [any[], FieldPacket[]];
   await connection.end();
 
-  const posts: Post[] = rows.map((row: Post) => ({
+  const posts: PostType[] = rows.map((row: PostType) => ({
     id: row.id,
     title: row.title,
     content: row.content,
@@ -27,4 +27,25 @@ export async function fetchAllPosts(): Promise<Post[]> {
   }));
 
   return posts;
+}
+
+export async function fetchPost(id: string): Promise<PostType | null> {
+  const connection = await connectToDatabase();
+  const query = "SELECT * FROM post WHERE id = ?";
+  const [rows] = (await connection.execute(query, [id])) as [any[], FieldPacket[]];
+  await connection.end();
+
+  let post = null;
+
+  if (rows && rows.length > 0) {
+    post = {
+      id: rows[0].id,
+      title: rows[0].title,
+      content: rows[0].content,
+      created_at: new Date(rows[0].created_at),
+      updated_at: new Date(rows[0].updated_at),
+    };
+  }
+
+  return post;
 }

@@ -1,29 +1,36 @@
 import Header from "@/app/ui/header";
-import { fetchAllPosts } from "@/app/lib/db";
 import Image from "next/image";
-import path from "path";
+
 import Content from "@/app/ui/content";
+import path from "path";
+import { PostType } from "../lib/definitions";
+import Link from "next/link";
 
 const cssFilePath = path.resolve(process.cwd(), "app/ui/post.module.css");
 
-export default async function Post() {
-  const posts = await fetchAllPosts();
-
+export default async function Post(
+  post: PostType,
+  isDetailPage: boolean = false
+) {
   return (
     <main>
-      {posts.map((post) => (
-        <article key={post.id}>
+      <article key={post.id}>
+        <Link href={`/posts/get/${post.id}`}>
           <Header title={post.title} updated_at={post.updated_at} />
-          <Image
-            src="/image-sample.webp"
-            alt="sample image"
-            width={500}
-            height={500}
-            className="m-auto mb-5"
-          />
-          <Content content={post.content ?? ""} cssFilePath={cssFilePath} />
-        </article>
-      ))}
+        </Link>
+        <Image
+          src="/image-sample.webp"
+          alt="sample image"
+          width={500}
+          height={500}
+          className="m-auto mb-5"
+        />
+        <Content
+          content={post.content ?? ""}
+          cssFilePath={cssFilePath}
+          isDetailPage={isDetailPage}
+        />
+      </article>
     </main>
   );
 }
