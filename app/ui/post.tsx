@@ -8,10 +8,11 @@ import Link from "next/link";
 
 const cssFilePath = path.resolve(process.cwd(), "app/ui/post.module.css");
 
-export default async function Post(
-  post: PostType,
-  isDetailPage: boolean = false
-) {
+export default async function Post(props: {
+  post: PostType;
+  isDetailPage?: boolean;
+}) {
+  const { post, isDetailPage = false } = props;
   return (
     <main>
       <article key={post.id}>

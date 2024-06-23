@@ -11,19 +11,17 @@ export default function Content({
   cssFilePath: string;
   isDetailPage: boolean;
 }) {
-  if (!isDetailPage) {
-    const convertedContent =
-      content.length > 200
-        ? content.substring(0, truncateLength) + "..."
-        : content;
-
-    return (
-      <div
-        className="flex flex-col mb-20"
-        dangerouslySetInnerHTML={{
-          __html: markdownToStyledHtml(convertedContent, cssFilePath),
-        }}
-      />
-    );
-  }
+  return (
+    <div
+      className="flex flex-col mb-20"
+      dangerouslySetInnerHTML={{
+        __html: markdownToStyledHtml(
+          isDetailPage
+            ? content
+            : content.substring(0, truncateLength) + "... ",
+          cssFilePath
+        ),
+      }}
+    />
+  );
 }
