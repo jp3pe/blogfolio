@@ -1,9 +1,18 @@
-import { insertPost } from "@/app/lib/actions";
+import { updatePost } from "@/app/lib/actions";
+import { fetchPost } from "@/app/lib/db";
+import { notFound } from "next/navigation";
 
-export default function Home() {
+export default async function Home({ params }: { params: { id: string } }) {
+  const post = await fetchPost(params.id);
+  if (!post) {
+    notFound();
+  }
+  const updatePostWithId = updatePost.bind(null, post?.id ?? "");
+
+  // TODO: value를 사용하기 때문에 사용자의 브라우저에서 <input> 태그에 대한 내용을 수정할 수 없는 문제 해결하기
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white max-w-[680px] mx-auto">
-      <form action={insertPost} className="w-full max-w-[501px]">
+      <form action={updatePostWithId} className="w-full max-w-[501px]">
         <div className="mb-4">
           <label
             htmlFor="title"
@@ -15,6 +24,7 @@ export default function Home() {
             type="text"
             id="title"
             name="title"
+            value={post?.title ?? ""}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
@@ -29,6 +39,7 @@ export default function Home() {
           <textarea
             id="content"
             name="content"
+            value={post?.content ?? ""}
             rows={4}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
