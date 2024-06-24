@@ -48,3 +48,20 @@ export async function insertPost(formData: FormData) {
   revalidatePath("/posts/get");
   redirect("/posts/get");
 }
+
+/**
+ * Deletes a post from the database based on the provided ID.
+ * After deleting the post, it revalidates the path to refresh the data
+ * and redirects to the posts listing page.
+ *
+ * @param id The unique identifier of the post to be deleted.
+ * the path has been revalidated, and the redirection has occurred.
+ */
+export async function deletePost(id: string) {
+  const connection = await connectToDatabase();
+  const query = "DELETE FROM post WHERE id = ?";
+  await connection.execute(query, [id]);
+  await connection.end();
+  revalidatePath("/posts/get");
+  redirect("/posts/get");
+}

@@ -2,7 +2,6 @@ import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
 import { PostType } from "@/app/lib/definitions";
 
-
 /**
  * Connects to the database using the provided configuration.
  * @returns {Promise<mysql.Connection>} A promise that resolves to a MySQL connection object.
@@ -46,7 +45,10 @@ export async function fetchAllPosts(): Promise<PostType[]> {
 export async function fetchPost(id: string): Promise<PostType | null> {
   const connection = await connectToDatabase();
   const query = "SELECT * FROM post WHERE id = ?";
-  const [rows] = (await connection.execute(query, [id])) as [any[], FieldPacket[]];
+  const [rows] = (await connection.execute(query, [id])) as [
+    any[],
+    FieldPacket[]
+  ];
   await connection.end();
 
   let post = null;
