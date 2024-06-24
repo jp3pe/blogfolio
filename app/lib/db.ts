@@ -1,17 +1,19 @@
 import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
 import { PostType } from "@/app/lib/definitions";
+import { unstable_noStore as noStore } from 'next/cache';
 
 /**
  * Connects to the database using the provided configuration.
  * @returns {Promise<mysql.Connection>} A promise that resolves to a MySQL connection object.
  */
-export async function connectToDatabase() {
+export async function connectToDatabase(): Promise<mysql.Connection> {
   const connection = await mysql.createConnection({
     host: nextConfig.env.MYSQL_HOST,
     user: nextConfig.env.MYSQL_USER,
     password: nextConfig.env.MYSQL_PASSWORD,
     database: nextConfig.env.MYSQL_DATABASE,
+    timezone: nextConfig.env.MYSQL_TIMEZONE,
   });
   return connection;
 }
@@ -21,8 +23,10 @@ export async function connectToDatabase() {
  * @returns {Promise<PostType[]>} A promise that resolves to an array of post objects.
  */
 export async function fetchAllPosts(): Promise<PostType[]> {
+  noStore();
+
   const connection = await connectToDatabase();
-  const query = "SELECT * FROM post";
+  const query = "SELECT * FROM post ORDER BY updated_at DESC";
   const [rows] = (await connection.execute(query)) as [any[], FieldPacket[]];
   await connection.end();
 
@@ -43,6 +47,8 @@ export async function fetchAllPosts(): Promise<PostType[]> {
  * @returns {Promise<PostType | null>} A promise that resolves to a post object, or null if no post was found.
  */
 export async function fetchPost(id: string): Promise<PostType | null> {
+  noStore();
+
   const connection = await connectToDatabase();
   const query = "SELECT * FROM post WHERE id = ?";
   const [rows] = (await connection.execute(query, [id])) as [

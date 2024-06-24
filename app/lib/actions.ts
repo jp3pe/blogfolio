@@ -50,6 +50,40 @@ export async function insertPost(formData: FormData) {
 }
 
 /**
+ * Updates an existing post in the database.
+ *
+ * @param id - The unique identifier of the post to be updated.
+ * @param formData - The form data containing the post title and content.
+ * @returns An object with errors, if any.
+ */
+export async function updatePost(id: string, formData: FormData) {
+  const validatedFields = schema.safeParse({
+    title: formData.get("title"),
+    content: formData.get("content"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const connection = await connectToDatabase();
+  const query = `
+    UPDATE post
+    SET title = ?, content = ?, updated_at = NOW()
+    WHERE id = ?
+  `;
+
+  const { title, content } = validatedFields.data;
+  await connection.execute(query, [title, content, id]);
+  await connection.end();
+
+  revalidatePath(`/posts/get/${id}`);
+  redirect(`/posts/get/${id}`);
+}
+
+/**
  * Deletes a post from the database based on the provided ID.
  * After deleting the post, it revalidates the path to refresh the data
  * and redirects to the posts listing page.
