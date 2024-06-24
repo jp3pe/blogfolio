@@ -26,7 +26,7 @@ export async function fetchAllPosts(): Promise<PostType[]> {
   noStore();
 
   const connection = await connectToDatabase();
-  const query = "SELECT * FROM post";
+  const query = "SELECT * FROM post ORDER BY updated_at DESC";
   const [rows] = (await connection.execute(query)) as [any[], FieldPacket[]];
   await connection.end();
 
