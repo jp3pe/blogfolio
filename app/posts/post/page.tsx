@@ -16,7 +16,7 @@ export default function Home() {
             type="text"
             id="title"
             name="title"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg h-12 px-4" 
             required
           />
         </div>
@@ -30,8 +30,8 @@ export default function Home() {
           <textarea
             id="content"
             name="content"
-            rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            rows={10}
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-50 px-4 py-2"
             required
           ></textarea>
         </div>
