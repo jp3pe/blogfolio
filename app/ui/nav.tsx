@@ -17,7 +17,7 @@ export default function Nav() {
         </li>
         <li>About</li>
         <li>Contact</li>
-        <li>Sign in</li>
+        <li><Link href="/users/sign-in/post">Sign in</Link></li>
         <li><Link href="/users/sign-up/post">Sign up</Link></li>
         <li className="relative h-10 w-10">
           <Image

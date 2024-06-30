@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createHash } from "crypto";
+import { FieldPacket } from "mysql2";
 
 /**
  * The form data interface.
@@ -124,6 +125,21 @@ const userSchema = z.object({
     .max(255, "사용자 이름은 255자 이하여야 합니다."),
 });
 
+// TODO: userSchema를 사용하고 필요 없는 항목을 생략하는 식으로 수정하기
+const userLoginSchema = z.object({
+  email: z
+    .string()
+    .email("유효한 이메일 주소를 입력해주세요.")
+    .max(255, "이메일 주소는 255자 이하여야 합니다."),
+  password: z
+    .string()
+    .min(6, "비밀번호는 최소 6자 이상이어야 합니다.")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z]).*$/,
+      "비밀번호는 대문자와 소문자를 모두 포함해야 합니다."
+    ),
+});
+
 /**
  * Signs up a new user by inserting their information into the database.
  *
@@ -155,4 +171,40 @@ export async function signUp(formData: FormData) {
 
   revalidatePath("/");
   redirect("/");
+}
+
+export async function signIn(formData: FormData) {
+  const validationResult = userLoginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validationResult.success) {
+    throw new Error("Validation failed");
+  }
+
+  const { email, password } = validationResult.data;
+  const hashedPassword = createHash("sha384").update(password).digest("hex");
+
+  const connection = await connectToDatabase();
+  const query = `
+   SELECT * FROM users
+   WHERE email = ? AND password = ?
+ `;
+
+  const [rows] = (await connection.execute(query, [email, hashedPassword])) as [
+    any[],
+    FieldPacket[]
+  ];
+  await connection.end();
+
+  if (rows && rows.length > 0) {
+    console.log("로그인 성공");
+    revalidatePath("/");
+    redirect("/");
+  } else {
+    console.log("로그인 실패");
+    revalidatePath("/users/sign-in");
+    redirect("/users/sign-in");
+  }
 }
