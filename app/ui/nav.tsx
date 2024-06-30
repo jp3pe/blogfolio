@@ -9,14 +9,16 @@ export default function Nav() {
         <h1 className="text-2xl font-bold">Blogfolio</h1>
       </Link>
       <ul className="flex gap-4 items-center">
-        <Link href="/posts/post">
-          <li>
+        <li>
+          <Link href="/posts/post">
             <FaPen className="inline mr-2" />
             Write
-          </li>
-        </Link>
+          </Link>
+        </li>
         <li>About</li>
         <li>Contact</li>
+        <li>Sign in</li>
+        <li><Link href="/users/sign-up/post">Sign up</Link></li>
         <li className="relative h-10 w-10">
           <Image
             src="/profile-sample.webp"

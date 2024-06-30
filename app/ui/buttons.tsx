@@ -44,16 +44,14 @@ export function UpdatePost({ id }: { id: string }) {
   );
 }
 
-export function SubmitPost({
-  type,
+export function SubmitButton({
   text,
 }: {
-  type: "submit" | "reset" | "button";
   text: string;
 }) {
   return (
     <Button
-      type={type}
+      type="submit"
       className="bg-gray-700 hover:bg-gray-600 focus:ring-gray-500"
     >
       {text}

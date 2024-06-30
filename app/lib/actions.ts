@@ -8,7 +8,7 @@ import { z } from "zod";
 /**
  * The form data interface.
  */
-const schema = z.object({
+const postSchema = z.object({
   title: z.string({
     invalid_type_error: "Invalid Title",
   }),
@@ -24,7 +24,7 @@ const schema = z.object({
  * @returns An object with errors, if any.
  */
 export async function insertPost(formData: FormData) {
-  const validatedFields = schema.safeParse({
+  const validatedFields = postSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
   });
@@ -57,7 +57,7 @@ export async function insertPost(formData: FormData) {
  * @returns An object with errors, if any.
  */
 export async function updatePost(id: string, formData: FormData) {
-  const validatedFields = schema.safeParse({
+  const validatedFields = postSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
   });
@@ -98,4 +98,21 @@ export async function deletePost(id: string) {
   await connection.end();
   revalidatePath("/posts/get");
   redirect("/posts/get");
+}
+
+// TODO: Change urls
+export async function signUp(formData: FormData) {
+  const connection = await connectToDatabase();
+  const query = `
+    INSERT INTO users (email, password)
+    VALUES (?, ?)
+  `;
+
+  const email = formData.get("email");
+  const password = formData.get("password");
+  await connection.execute(query, [email, password]);
+  await connection.end();
+
+  revalidatePath("/users/sign-up/get");
+  redirect("/users/sign-up/get");
 }

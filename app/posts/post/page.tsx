@@ -1,5 +1,5 @@
 import { insertPost } from "@/app/lib/actions";
-import { GoBack, SubmitPost } from "@/app/ui/buttons";
+import { GoBack, SubmitButton } from "@/app/ui/buttons";
 import Link from "next/link";
 
 export default function Home() {
@@ -39,7 +39,7 @@ export default function Home() {
         <Link href={`/posts/get`}>
           <GoBack text="Go back" />
         </Link>
-        <SubmitPost type="submit" text="Submit" />
+        <SubmitButton text="Submit" />
       </form>
     </main>
   );

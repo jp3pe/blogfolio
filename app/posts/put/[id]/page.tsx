@@ -1,6 +1,6 @@
 import { updatePost } from "@/app/lib/actions";
 import { fetchPost } from "@/app/lib/db";
-import { GoBack, SubmitPost } from "@/app/ui/buttons";
+import { GoBack, SubmitButton } from "@/app/ui/buttons";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -49,7 +49,7 @@ export default async function Home({ params }: { params: { id: string } }) {
         <Link href={`/posts/get/${post?.id}`}>
           <GoBack text="Go back" />
         </Link>
-        <SubmitPost type="submit" text="Submit" />
+        <SubmitButton text="Submit" />
       </form>
     </main>
   );
