@@ -21,19 +21,18 @@ const convertMarkdownToSafeHtml = (markdown: string): string => {
 /**
  * Applies CSS styles to an HTML string.
  *
- * @param html - The HTML string to apply CSS styles to.
- * @param cssFilePath - The file path of the CSS file containing the styles to apply.
- * @returns The HTML string with the applied CSS styles.
- * @throws If there is an error reading the CSS file or applying the styles.
+ * @param html - The HTML content to style.
+ * @param cssFilePath - The file path to the CSS file containing the styles to apply.
+ * @returns The styled HTML content.
  */
-const applyCssToHtml = (
-  html: string,
-  cssFilePath: string
-): string => {
+const applyCssToHtml = (html: string, cssFilePath: string): string => {
   try {
     const cssStyles = fs.readFileSync(cssFilePath, "utf8");
-    const styleTag = `<style>${cssStyles}</style>`;
-    return `${styleTag}${html}`;
+    const uniqueClassName = "custom-style-" + new Date().getTime();
+    const styleTag = `<style>.${uniqueClassName} { ${cssStyles} }</style>`;
+    const wrappedHtml = `<div class="${uniqueClassName}">${html}</div>`;
+
+    return `${styleTag}${wrappedHtml}`;
   } catch (error) {
     console.error("Error reading CSS file:", error);
     throw new Error("Failed to apply CSS to HTML.");

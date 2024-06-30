@@ -12,7 +12,7 @@ export default async function Home({ params }: { params: { id: string } }) {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24 bg-white max-w-[680px] mx-auto">
-      <div className="flex justify-start w-full mb-2 space-x-2">
+      <div className="flex justify-start w-full mb-2">
         <DeletePost id={post.id} />
         <UpdatePost id={post.id} />
       </div>
