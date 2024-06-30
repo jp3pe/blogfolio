@@ -5,7 +5,7 @@ import { TextInput } from "@/app/ui/inputs";
 export default function Home() {
   return (
     <div className="max-w-md mx-auto my-10">
-      <h1 className="text-3xl font-bold text-center mb-6">회원가입</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">로그인</h1>
       <form action={signIn} className="space-y-4">
         <div>
           <label

@@ -154,7 +154,9 @@ export async function signUp(formData: FormData) {
   });
 
   if (!validationResult.success) {
-    throw new Error("Validation failed");
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+    };
   }
 
   const { user_id, email, password, username } = validationResult.data;
@@ -180,7 +182,9 @@ export async function signIn(formData: FormData) {
   });
 
   if (!validationResult.success) {
-    throw new Error("Validation failed");
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+    };
   }
 
   const { email, password } = validationResult.data;
@@ -204,7 +208,6 @@ export async function signIn(formData: FormData) {
     redirect("/");
   } else {
     console.log("로그인 실패");
-    revalidatePath("/users/sign-in");
-    redirect("/users/sign-in");
+    redirect("/users/sign-in/post");
   }
 }
