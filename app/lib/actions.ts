@@ -4,6 +4,7 @@ import { connectToDatabase } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { createHash } from "crypto";
 
 /**
  * The form data interface.
@@ -100,19 +101,58 @@ export async function deletePost(id: string) {
   redirect("/posts/get");
 }
 
-// TODO: Change urls
+const userSchema = z.object({
+  user_id: z
+    .string()
+    .min(1, "사용자 ID는 필수입니다.")
+    .max(20, "사용자 ID는 20자 이하여야 합니다.")
+    .regex(/^[a-zA-Z0-9]+$/, "사용자 ID는 영문자와 숫자만 포함할 수 있습니다."),
+  email: z
+    .string()
+    .email("유효한 이메일 주소를 입력해주세요.")
+    .max(255, "이메일 주소는 255자 이하여야 합니다."),
+  password: z
+    .string()
+    .min(6, "비밀번호는 최소 6자 이상이어야 합니다.")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z]).*$/,
+      "비밀번호는 대문자와 소문자를 모두 포함해야 합니다."
+    ),
+  username: z
+    .string()
+    .min(1, "사용자 이름은 필수입니다.")
+    .max(255, "사용자 이름은 255자 이하여야 합니다."),
+});
+
+/**
+ * Signs up a new user by inserting their information into the database.
+ *
+ * @param formData - The form data containing the user's information.
+ */
 export async function signUp(formData: FormData) {
+  const validationResult = userSchema.safeParse({
+    user_id: formData.get("user_id"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    username: formData.get("username"),
+  });
+
+  if (!validationResult.success) {
+    throw new Error("Validation failed");
+  }
+
+  const { user_id, email, password, username } = validationResult.data;
+  const hashedPassword = createHash("sha384").update(password).digest("hex");
+
   const connection = await connectToDatabase();
   const query = `
-    INSERT INTO users (email, password)
-    VALUES (?, ?)
+    INSERT INTO users (user_id, email, password, username)
+    VALUES (?, ?, ?, ?)
   `;
 
-  const email = formData.get("email");
-  const password = formData.get("password");
-  await connection.execute(query, [email, password]);
+  await connection.execute(query, [user_id, email, hashedPassword, username]);
   await connection.end();
 
-  revalidatePath("/users/sign-up/get");
-  redirect("/users/sign-up/get");
+  revalidatePath("/");
+  redirect("/");
 }
