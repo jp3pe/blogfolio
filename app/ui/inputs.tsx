@@ -1,5 +1,6 @@
 export function TextInput({
   className,
+  type = "text",
   ...rest
 }: {
   id?: string;
@@ -7,11 +8,12 @@ export function TextInput({
   label?: string;
   required?: boolean;
   defaultValue?: string;
+  type?: string;
   className?: string;
 }) {
   return (
     <input
-      type="text"
+      type={type}
       {...rest}
       className={`mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg h-12 px-4 ${className}`}
     />
