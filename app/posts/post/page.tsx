@@ -1,5 +1,6 @@
 import { insertPost } from "@/app/lib/actions";
-import { SubmitPost } from "@/app/ui/buttons";
+import { GoBack, SubmitPost } from "@/app/ui/buttons";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
             type="text"
             id="title"
             name="title"
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg h-12 px-4" 
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg h-12 px-4"
             required
           />
         </div>
@@ -35,6 +36,9 @@ export default function Home() {
             required
           ></textarea>
         </div>
+        <Link href={`/posts/get`}>
+          <GoBack text="Go back" />
+        </Link>
         <SubmitPost type="submit" text="Submit" />
       </form>
     </main>

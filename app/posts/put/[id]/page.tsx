@@ -1,6 +1,7 @@
 import { updatePost } from "@/app/lib/actions";
 import { fetchPost } from "@/app/lib/db";
-import { SubmitPost } from "@/app/ui/buttons";
+import { GoBack, SubmitPost } from "@/app/ui/buttons";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function Home({ params }: { params: { id: string } }) {
@@ -45,6 +46,9 @@ export default async function Home({ params }: { params: { id: string } }) {
             required
           ></textarea>
         </div>
+        <Link href={`/posts/get/${post?.id}`}>
+          <GoBack text="Go back" />
+        </Link>
         <SubmitPost type="submit" text="Submit" />
       </form>
     </main>
