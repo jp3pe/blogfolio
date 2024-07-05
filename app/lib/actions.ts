@@ -175,7 +175,7 @@ export async function signUp(formData: FormData) {
   redirect("/");
 }
 
-export async function signIn(formData: FormData) {
+export async function signIn(_currentState: unknown, formData: FormData) {
   const validationResult = userLoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -203,11 +203,7 @@ export async function signIn(formData: FormData) {
   await connection.end();
 
   if (rows && rows.length > 0) {
-    console.log("로그인 성공");
-    revalidatePath("/");
-    redirect("/");
   } else {
-    console.log("로그인 실패");
-    redirect("/users/sign-in/post");
+    return "Invalid email or password. Please try again.";
   }
 }

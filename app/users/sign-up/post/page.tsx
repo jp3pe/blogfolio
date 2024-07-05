@@ -2,7 +2,7 @@ import { signUp } from "@/app/lib/actions";
 import { SubmitButton } from "@/app/ui/buttons";
 import { TextInput } from "@/app/ui/inputs";
 
-export default function Home() {
+export default function Page() {
   return (
     <div className="max-w-md mx-auto my-10">
       <h1 className="text-3xl font-bold text-center mb-6">회원가입</h1>
