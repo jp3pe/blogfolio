@@ -10,6 +10,8 @@ export function TextInput({
   defaultValue?: string;
   type?: string;
   className?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <input
@@ -30,6 +32,8 @@ export function TextArea({
   required?: boolean;
   defaultValue?: string;
   className?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }) {
   return (
     <textarea
