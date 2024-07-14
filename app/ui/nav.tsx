@@ -22,7 +22,7 @@ export default async function Nav() {
         <li>Contact</li>
         {session?.user ? (
           <>
-            <li>Hello {session.user.email}</li>
+            <li>Hello {session.user.name}</li>
             <li>
               <form
                 action={async () => {

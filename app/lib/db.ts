@@ -1,6 +1,6 @@
 import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
-import { PostType } from "@/app/lib/definitions";
+import { PostType, UserType } from "@/app/lib/definitions";
 import { unstable_noStore as noStore } from "next/cache";
 
 /**
@@ -75,7 +75,7 @@ export async function fetchPost(id: string): Promise<PostType | null> {
 export async function fetchUserByEmailAndPassword(
   email: string,
   hashedPassword: string
-) {
+): Promise<UserType> {
   const connection = await connectToDatabase();
   const query = `
     SELECT * FROM users

@@ -10,9 +10,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: {},
         password: {},
+        user_name: {},
       },
       authorize: async (credentials) => {
-        let user = null;
+        let user = { id: '', name: '', email: '', image: '' }
 
         // TODO: Use safeParseAsync instead of parseAsync
         const { email, password } = await signInSchema.parseAsync(credentials);
@@ -23,7 +24,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .digest("hex");
 
         // logic to verify if user exists
-        user = await fetchUserByEmailAndPassword(email, hashedPassword);
+        // user = await fetchUserByEmailAndPassword(email, hashedPassword);
+        // TODO: Do not use temp variable.
+        const tempUser = await fetchUserByEmailAndPassword(email, hashedPassword); 
+        user.email = tempUser.email;
+        user.id = tempUser.user_id;
+        user.name = tempUser.user_name;
 
         if (!user) {
           // No user found, so this is their first attempt to login
