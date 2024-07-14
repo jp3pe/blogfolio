@@ -2,6 +2,8 @@ import { signUp } from "@/app/lib/actions";
 import { SubmitButton } from "@/app/ui/buttons";
 import { TextInput } from "@/app/ui/inputs";
 
+// TODO: Show validationResult from actions.ts
+
 export default function Page() {
   return (
     <div className="max-w-md mx-auto my-10">

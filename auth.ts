@@ -14,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         let user = null;
 
+        // TODO: Use safeParseAsync instead of parseAsync
         const { email, password } = await signInSchema.parseAsync(credentials);
 
         // logic to salt and hash password

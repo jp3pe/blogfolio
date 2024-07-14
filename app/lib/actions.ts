@@ -1,22 +1,10 @@
 "use server";
 
-import { connectToDatabase, fetchUserByEmailAndPassword } from "@/app/lib/db";
+import { connectToDatabase } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { createHash } from "crypto";
-
-/**
- * The form data interface.
- */
-const postSchema = z.object({
-  title: z.string({
-    invalid_type_error: "Invalid Title",
-  }),
-  content: z.string({
-    invalid_type_error: "Invalid Content",
-  }),
-});
+import { postSchema, signUpSchema } from "@/lib/zod";
 
 /**
  * Inserts a new post into the database.
@@ -101,51 +89,13 @@ export async function deletePost(id: string) {
   redirect("/posts/get");
 }
 
-const userSchema = z.object({
-  user_id: z
-    .string()
-    .min(1, "사용자 ID는 필수입니다.")
-    .max(20, "사용자 ID는 20자 이하여야 합니다.")
-    .regex(/^[a-zA-Z0-9]+$/, "사용자 ID는 영문자와 숫자만 포함할 수 있습니다."),
-  email: z
-    .string()
-    .email("유효한 이메일 주소를 입력해주세요.")
-    .max(255, "이메일 주소는 255자 이하여야 합니다."),
-  password: z
-    .string()
-    .min(6, "비밀번호는 최소 6자 이상이어야 합니다.")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z]).*$/,
-      "비밀번호는 대문자와 소문자를 모두 포함해야 합니다."
-    ),
-  username: z
-    .string()
-    .min(1, "사용자 이름은 필수입니다.")
-    .max(255, "사용자 이름은 255자 이하여야 합니다."),
-});
-
-// TODO: userSchema를 사용하고 필요 없는 항목을 생략하는 식으로 수정하기
-const userLoginSchema = z.object({
-  email: z
-    .string()
-    .email("유효한 이메일 주소를 입력해주세요.")
-    .max(255, "이메일 주소는 255자 이하여야 합니다."),
-  password: z
-    .string()
-    .min(6, "비밀번호는 최소 6자 이상이어야 합니다.")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z]).*$/,
-      "비밀번호는 대문자와 소문자를 모두 포함해야 합니다."
-    ),
-});
-
 /**
  * Signs up a new user by inserting their information into the database.
  *
  * @param formData - The form data containing the user's information.
  */
 export async function signUp(formData: FormData) {
-  const validationResult = userSchema.safeParse({
+  const validationResult = signUpSchema.safeParse({
     user_id: formData.get("user_id"),
     email: formData.get("email"),
     password: formData.get("password"),
@@ -170,7 +120,5 @@ export async function signUp(formData: FormData) {
   await connection.execute(query, [user_id, email, hashedPassword, username]);
   await connection.end();
 
-  revalidatePath("/");
-  redirect("/");
+  redirect("/users/sign-in/post");
 }
-
