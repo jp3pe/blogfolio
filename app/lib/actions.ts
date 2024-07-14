@@ -99,7 +99,7 @@ export async function signUp(formData: FormData) {
     user_id: formData.get("user_id"),
     email: formData.get("email"),
     password: formData.get("password"),
-    username: formData.get("username"),
+    user_name: formData.get("user_name"),
   });
 
   if (!validationResult.success) {
@@ -108,16 +108,16 @@ export async function signUp(formData: FormData) {
     };
   }
 
-  const { user_id, email, password, username } = validationResult.data;
+  const { user_id, email, password, user_name } = validationResult.data;
   const hashedPassword = createHash("sha384").update(password).digest("hex");
 
   const connection = await connectToDatabase();
   const query = `
-    INSERT INTO users (user_id, email, password, username)
+    INSERT INTO users (user_id, email, password, user_name)
     VALUES (?, ?, ?, ?)
   `;
 
-  await connection.execute(query, [user_id, email, hashedPassword, username]);
+  await connection.execute(query, [user_id, email, hashedPassword, user_name]);
   await connection.end();
 
   redirect("/users/sign-in/post");

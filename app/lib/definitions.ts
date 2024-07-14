@@ -9,7 +9,7 @@ export type PostType = {
 export type UserType = {
   user_id: string;
   email: string;
-  username: string;
+  user_name: string;
   password: string;
   created_at: Date | null;
   updated_at: Date | null;

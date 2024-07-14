@@ -38,12 +38,12 @@ export default function Page() {
         </div>
         <div>
           <label
-            htmlFor="username"
+            htmlFor="user_name"
             className="block text-sm font-medium text-gray-700"
           >
             사용자 이름:
           </label>
-          <TextInput id="username" name="username" required />
+          <TextInput id="user_name" name="user_name" required />
         </div>
         <SubmitButton text="회원가입" />
       </form>

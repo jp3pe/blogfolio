@@ -35,7 +35,7 @@ export const signUpSchema = object({
       /^(?=.*[a-z])(?=.*[A-Z]).*$/,
       "비밀번호는 대문자와 소문자를 모두 포함해야 합니다."
     ),
-  username: string()
+  user_name: string()
     .min(1, "사용자 이름은 필수입니다.")
     .max(255, "사용자 이름은 255자 이하여야 합니다."),
 });
