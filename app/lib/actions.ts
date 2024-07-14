@@ -1,6 +1,6 @@
 "use server";
 
-import { connectToDatabase } from "@/app/lib/db";
+import { connectToDatabase, fetchUserByEmailAndPassword } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -190,20 +190,9 @@ export async function signIn(_currentState: unknown, formData: FormData) {
   const { email, password } = validationResult.data;
   const hashedPassword = createHash("sha384").update(password).digest("hex");
 
-  const connection = await connectToDatabase();
-  const query = `
-   SELECT * FROM users
-   WHERE email = ? AND password = ?
- `;
+  const user = await fetchUserByEmailAndPassword(email, hashedPassword);
 
-  const [rows] = (await connection.execute(query, [email, hashedPassword])) as [
-    any[],
-    FieldPacket[]
-  ];
-  await connection.end();
-
-  if (rows && rows.length > 0) {
-  } else {
+  if (!user) {
     return "Invalid email or password. Please try again.";
   }
 }
