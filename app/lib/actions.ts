@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createHash } from "crypto";
-import { FieldPacket } from "mysql2";
 
 /**
  * The form data interface.
@@ -175,24 +174,3 @@ export async function signUp(formData: FormData) {
   redirect("/");
 }
 
-export async function signIn(_currentState: unknown, formData: FormData) {
-  const validationResult = userLoginSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
-
-  if (!validationResult.success) {
-    return {
-      errors: validationResult.error.flatten().fieldErrors,
-    };
-  }
-
-  const { email, password } = validationResult.data;
-  const hashedPassword = createHash("sha384").update(password).digest("hex");
-
-  const user = await fetchUserByEmailAndPassword(email, hashedPassword);
-
-  if (!user) {
-    return "Invalid email or password. Please try again.";
-  }
-}

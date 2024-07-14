@@ -1,8 +1,11 @@
+import { auth, signOut } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 
-export default function Nav() {
+export default async function Nav() {
+  const session = await auth();
+
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
       <Link href="/">
@@ -17,8 +20,30 @@ export default function Nav() {
         </li>
         <li>About</li>
         <li>Contact</li>
-        <li><Link href="/users/sign-in/post">Sign in</Link></li>
-        <li><Link href="/users/sign-up/post">Sign up</Link></li>
+        {session?.user ? (
+          <>
+            <li>Hello {session.user.email}</li>
+            <li>
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut();
+                }}
+              >
+                <button>Sign out</button>
+              </form>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link href="/users/sign-in/post">Sign in</Link>
+            </li>
+            <li>
+              <Link href="/users/sign-up/post">Sign up</Link>
+            </li>
+          </>
+        )}
         <li className="relative h-10 w-10">
           <Image
             src="/profile-sample.webp"
