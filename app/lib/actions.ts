@@ -4,7 +4,7 @@ import { connectToDatabase } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createHash } from "crypto";
-import { postSchema, signUpSchema } from "@/lib/zod";
+import { postSchema, signUpSchema } from "@/app/lib/zod";
 
 /**
  * Inserts a new post into the database.

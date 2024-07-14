@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { fetchUserByEmailAndPassword } from "./app/lib/db";
 import { createHash } from "crypto";
-import { signInSchema } from "./lib/zod";
+import { signInSchema } from "@/app/lib/zod";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
