@@ -24,12 +24,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .digest("hex");
 
         // logic to verify if user exists
-        // user = await fetchUserByEmailAndPassword(email, hashedPassword);
-        // TODO: Do not use temp variable.
-        const tempUser = await fetchUserByEmailAndPassword(email, hashedPassword); 
-        user.email = tempUser.email;
-        user.id = tempUser.user_id;
-        user.name = tempUser.user_name;
+          const fetchedUser = await fetchUserByEmailAndPassword(email, hashedPassword);
+          const { user_id: id, user_name: name } = fetchedUser;
+          user.email = email;
+          user.id = id;
+          user.name = name;
 
         if (!user) {
           // No user found, so this is their first attempt to login
