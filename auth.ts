@@ -10,7 +10,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: {},
         password: {},
-        user_name: {},
       },
       authorize: async (credentials) => {
         let user = { id: '', name: '', email: '', image: '' }
@@ -40,4 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  // pages: {
+  //   signIn: "/users/sign-in/post"
+  // }
 });
