@@ -39,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  // TODO: Use custom page for login after implement CSRF function
   // pages: {
   //   signIn: "/users/sign-in/post"
   // }

@@ -1,10 +1,9 @@
 import { auth, signIn, signOut } from "@/auth";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 
-export function SignIn({csrfToken}: {csrfToken: string}) {
+export function SignIn() {
   return (
     <form
       action={async () => {
@@ -12,14 +11,13 @@ export function SignIn({csrfToken}: {csrfToken: string}) {
         await signIn();
       }}
     >
-      <input type="hidden" name="csrfToken" value={csrfToken} />
+      <input type="hidden" name="csrfToken" />
       <button type="submit">Sign in</button>
     </form>
   );
 }
 
 export default async function Nav() {
-  const csrfToken = cookies().get("authjs.csrf-token")?.value ?? ""
   const session = await auth();
 
   return (
@@ -53,7 +51,7 @@ export default async function Nav() {
         ) : (
           <>
             <li>
-              <SignIn csrfToken={csrfToken}/>
+              <SignIn />
             </li>
             <li>
               <Link href="/users/sign-up/post">Sign up</Link>
