@@ -1,7 +1,7 @@
 import mysql, { FieldPacket } from "mysql2/promise";
 import nextConfig from "@/next.config.mjs";
-import { PostType } from "@/app/lib/definitions";
-import { unstable_noStore as noStore } from 'next/cache';
+import { PostType, UserType } from "@/app/lib/definitions";
+import { unstable_noStore as noStore } from "next/cache";
 
 /**
  * Connects to the database using the provided configuration.
@@ -70,4 +70,22 @@ export async function fetchPost(id: string): Promise<PostType | null> {
   }
 
   return post;
+}
+
+export async function fetchUserByEmailAndPassword(
+  email: string,
+  hashedPassword: string
+): Promise<UserType> {
+  const connection = await connectToDatabase();
+  const query = `
+    SELECT * FROM users
+    WHERE email = ? AND password = ?
+  `;
+  const [rows] = (await connection.execute(query, [email, hashedPassword])) as [
+    any[],
+    FieldPacket[]
+  ];
+  await connection.end();
+
+  return rows.length > 0 ? rows[0] : null;
 }

@@ -1,0 +1,44 @@
+export function TextInput({
+  className,
+  type = "text",
+  ...rest
+}: {
+  id?: string;
+  name?: string;
+  label?: string;
+  required?: boolean;
+  defaultValue?: string;
+  type?: string;
+  className?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <input
+      type={type}
+      {...rest}
+      className={`mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg h-12 px-4 ${className}`}
+    />
+  );
+}
+
+export function TextArea({
+  className,
+  ...rest
+}: {
+  id?: string;
+  name?: string;
+  rows?: number;
+  required?: boolean;
+  defaultValue?: string;
+  className?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
+  return (
+    <textarea
+      {...rest}
+      className={`mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-50 px-4 py-2 ${className}`}
+    ></textarea>
+  );
+}

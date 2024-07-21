@@ -5,15 +5,18 @@ export function Button({
   className,
   type = "button",
   children,
+  ...rest
 }: {
-  className: string;
-  type?: "submit" | "reset" | "button";
   children: React.ReactNode;
+  ariaDisabled?: boolean;
+  className?: string;
+  type?: "submit" | "reset" | "button";
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const baseClass =
     "inline-flex justify-center rounded-md border border-transparent mr-2 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2";
   return (
-    <button type={type} className={`${baseClass} ${className}`}>
+    <button type={type} className={`${baseClass} ${className}`} {...rest}>
       {children}
     </button>
   );
@@ -44,16 +47,10 @@ export function UpdatePost({ id }: { id: string }) {
   );
 }
 
-export function SubmitPost({
-  type,
-  text,
-}: {
-  type: "submit" | "reset" | "button";
-  text: string;
-}) {
+export function SubmitButton({ text }: { text: string }) {
   return (
     <Button
-      type={type}
+      type="submit"
       className="bg-gray-700 hover:bg-gray-600 focus:ring-gray-500"
     >
       {text}
@@ -61,7 +58,7 @@ export function SubmitPost({
   );
 }
 
-export function GoBack({text}: {text: string}) {
+export function GoBack({ text }: { text: string }) {
   return (
     <Button
       type="button"

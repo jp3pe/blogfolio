@@ -3,19 +3,8 @@
 import { connectToDatabase } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
-
-/**
- * The form data interface.
- */
-const schema = z.object({
-  title: z.string({
-    invalid_type_error: "Invalid Title",
-  }),
-  content: z.string({
-    invalid_type_error: "Invalid Content",
-  }),
-});
+import { createHash } from "crypto";
+import { postSchema, signUpSchema } from "@/app/lib/zod";
 
 /**
  * Inserts a new post into the database.
@@ -24,7 +13,7 @@ const schema = z.object({
  * @returns An object with errors, if any.
  */
 export async function insertPost(formData: FormData) {
-  const validatedFields = schema.safeParse({
+  const validatedFields = postSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
   });
@@ -57,7 +46,7 @@ export async function insertPost(formData: FormData) {
  * @returns An object with errors, if any.
  */
 export async function updatePost(id: string, formData: FormData) {
-  const validatedFields = schema.safeParse({
+  const validatedFields = postSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
   });
@@ -98,4 +87,38 @@ export async function deletePost(id: string) {
   await connection.end();
   revalidatePath("/posts/get");
   redirect("/posts/get");
+}
+
+/**
+ * Signs up a new user by inserting their information into the database.
+ *
+ * @param formData - The form data containing the user's information.
+ */
+export async function signUp(formData: FormData) {
+  const validationResult = signUpSchema.safeParse({
+    user_id: formData.get("user_id"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    user_name: formData.get("user_name"),
+  });
+
+  if (!validationResult.success) {
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const { user_id, email, password, user_name } = validationResult.data;
+  const hashedPassword = createHash("sha384").update(password).digest("hex");
+
+  const connection = await connectToDatabase();
+  const query = `
+    INSERT INTO users (user_id, email, password, user_name)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  await connection.execute(query, [user_id, email, hashedPassword, user_name]);
+  await connection.end();
+
+  redirect("/users/sign-in/post");
 }

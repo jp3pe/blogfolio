@@ -1,22 +1,63 @@
+import { auth, signIn, signOut } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 
-export default function Nav() {
+export function SignIn() {
+  return (
+    <form
+      action={async () => {
+        "use server";
+        await signIn();
+      }}
+    >
+      <input type="hidden" name="csrfToken" />
+      <button type="submit">Sign in</button>
+    </form>
+  );
+}
+
+export default async function Nav() {
+  const session = await auth();
+
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
       <Link href="/">
         <h1 className="text-2xl font-bold">Blogfolio</h1>
       </Link>
       <ul className="flex gap-4 items-center">
-        <Link href="/posts/post">
-          <li>
+        <li>
+          <Link href="/posts/post">
             <FaPen className="inline mr-2" />
             Write
-          </li>
-        </Link>
+          </Link>
+        </li>
         <li>About</li>
         <li>Contact</li>
+        {session?.user ? (
+          <>
+            <li>Hello {session.user.name}</li>
+            <li>
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut();
+                }}
+              >
+                <button>Sign out</button>
+              </form>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <SignIn />
+            </li>
+            <li>
+              <Link href="/users/sign-up/post">Sign up</Link>
+            </li>
+          </>
+        )}
         <li className="relative h-10 w-10">
           <Image
             src="/profile-sample.webp"
